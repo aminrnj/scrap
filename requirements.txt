@@ -1,0 +1,11 @@
+Flask
+SQLAlchemy
+Werkzeug
+Flask-SQLAlchemy
+Flask-Login
+pytz
+jdatetime
+requests
+beautifulsoup4
+selenium
+pandas

@@ -1,0 +1,11 @@
+file_path = r"C:\inetpub\wwwroot\flask v0.3\static\scrap.xlsx"
+db_name = r"C:\inetpub\wwwroot\flask v0.3\datasitenews5.db"
+
+
+app.run(host="192.168.100.16", port=8080)
+
+
+pm2 start app.py --interpreter python --name flask-app
+pm2 stop app.py --interpreter python --name flask-app
+
+pm2 start app.py --interpreter python --name meeting-tracker

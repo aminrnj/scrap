@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>مدیریت تیکت‌ها</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- استفاده از Bootstrap 5 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            direction: rtl;
+            font-family: 'Yekan', sans-serif;
+            background: #f8f9fa;
+        }
+        .container {
+            margin-top: 30px;
+            max-width: 900px;
+        }
+        .ticket-card {
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .ticket-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+        .ticket-header {
+            background: linear-gradient(135deg, #007bff, #00aaff);
+            color: #fff;
+            padding: 15px;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ticket-body {
+            background: #fff;
+            padding: 20px;
+        }
+        .ticket-body p {
+            margin-bottom: 10px;
+        }
+        .ticket-form {
+            background: #f1f1f1;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+        }
+        .ticket-form label {
+            font-weight: bold;
+        }
+        .ticket-form button {
+            border-radius: 30px;
+        }
+        @media (max-width: 576px) {
+            .ticket-body {
+                padding: 15px;
+            }
+            .ticket-header {
+                font-size: 1.1rem;
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h3 class="mb-4 text-center">مدیریت تیکت‌ها</h3>
+    {% if tickets|length > 0 %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for ticket in tickets %}
+            <div class="col">
+                <div class="card ticket-card">
+                    <div class="ticket-header">
+                        <span>موضوع: {{ ticket.subject }}</span>
+                        <span class="badge bg-info" style="font-size: 0.9rem;">{{ ticket.status }}</span>
+                    </div>
+                    <div class="ticket-body">
+                        <p><strong>کاربر:</strong> {{ ticket.user.username }}</p>
+                        <p><strong>توضیحات:</strong> {{ ticket.description }}</p>
+                        <p><strong>تاریخ ثبت:</strong> {{ ticket.date_created|to_jalali }}</p>
+                        {% if ticket.admin_response %}
+                            <p><strong>پاسخ مدیر:</strong> {{ ticket.admin_response }}</p>
+                        {% else %}
+                            <p class="text-muted"><em>هنوز پاسخی از مدیر دریافت نشده است.</em></p>
+                        {% endif %}
+                        <div class="ticket-form mt-3">
+                            <form method="POST">
+                                <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                                <div class="mb-2">
+                                    <label for="status_{{ ticket.id }}" class="form-label">وضعیت تیکت:</label>
+                                    <select class="form-select" id="status_{{ ticket.id }}" name="status">
+                                        <option value="در انتظار پاسخ" {% if ticket.status == "در انتظار پاسخ" %}selected{% endif %}>در انتظار پاسخ</option>
+                                        <option value="در حال پیگیری" {% if ticket.status == "در حال پیگیری" %}selected{% endif %}>در حال پیگیری</option>
+                                        <option value="اتمام" {% if ticket.status == "اتمام" %}selected{% endif %}>اتمام</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="admin_response_{{ ticket.id }}" class="form-label">پاسخ مدیر:</label>
+                                    <textarea class="form-control" id="admin_response_{{ ticket.id }}" name="admin_response" rows="3" placeholder="پاسخ مدیر را وارد کنید...">{{ ticket.admin_response }}</textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success btn-sm">ثبت تغییرات</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center mt-4">تیکتی وجود ندارد.</p>
+    {% endif %}
+    <div class="text-center mt-4">
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">بازگشت به داشبورد</a>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

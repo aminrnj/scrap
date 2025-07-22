@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>مشاهده درخواست‌ها</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      direction: rtl;
+      font-family: 'Yekan', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      padding-top: 20px;
+    }
+    .card {
+      border: none;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      margin-bottom: 30px;
+    }
+    .card-header {
+      background: linear-gradient(135deg, #007bff, #00aaff);
+      color: #fff;
+      padding: 20px;
+      font-size: 1.25rem;
+      font-weight: bold;
+      text-align: center;
+    }
+    .table-responsive {
+      background-color: #fff;
+      padding: 20px;
+    }
+    .table tbody tr {
+      transition: background-color 0.3s ease;
+    }
+    .table tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+    a {
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .back-btn {
+      display: block;
+      width: fit-content;
+      margin: 20px auto 0;
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #007bff, #00aaff);
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease;
+    }
+    .back-btn:hover {
+      transform: translateY(-3px);
+      text-decoration: none;
+      color: #fff;
+    }
+    ul.list-unstyled li {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container my-5">
+    <div class="card">
+      <div class="card-header">
+        مشاهده درخواست‌های کاربران
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover mb-0">
+            <thead>
+              <tr>
+                <th>کاربر</th>
+                <th>نام محصول</th>
+                <th>لینک‌ها</th>
+                <th>تاریخ درخواست</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for req in requests %}
+              <tr>
+                <td>{{ req.user.username }}</td>
+                <td>{{ req.product_name }}</td>
+                <td>
+                  <ul class="list-unstyled mb-0">
+                    {% for link in json.loads(req.links) %}
+                      <li><a href="{{ link }}" target="_blank">{{ link }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </td>
+                <td>{{ req.date_created|to_jalali }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary back-btn">بازگشت به داشبورد</a>
+  </div>
+</body>
+</html>

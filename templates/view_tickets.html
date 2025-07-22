@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>مشاهده تیکت‌ها</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            direction: rtl;
+            font-family: 'Yekan', sans-serif;
+            background: #f8f9fa;
+        }
+        .ticket-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .ticket-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+        .ticket-header {
+            background: linear-gradient(135deg, #007bff, #00aaff);
+            color: #fff;
+            padding: 15px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .ticket-body {
+            padding: 20px;
+        }
+        .ticket-body p {
+            margin-bottom: 10px;
+        }
+        .ticket-footer {
+            padding: 10px 20px;
+            text-align: left;
+            border-top: 1px solid #e9ecef;
+            background: #f8f9fa;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        .delete-btn {
+            font-size: 0.9rem;
+        }
+        @media (max-width: 576px) {
+            .ticket-body {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <h3 class="text-center mb-4">تیکت‌های شما</h3>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for ticket in tickets %}
+            <div class="col">
+                <div class="card ticket-card">
+                    <div class="ticket-header">
+                        <h5 class="card-title mb-0">{{ ticket.subject }}</h5>
+                    </div>
+                    <div class="ticket-body">
+                        <p><strong>کاربر:</strong> {{ ticket.user.username }}</p>
+                        <p><strong>توضیحات:</strong> {{ ticket.description }}</p>
+                        <p><strong>تاریخ ثبت:</strong> {{ ticket.date_created|to_jalali }}</p>
+                        {% if ticket.admin_response %}
+                            <p><strong>پاسخ مدیر:</strong> {{ ticket.admin_response }}</p>
+                        {% else %}
+                            <p class="text-muted"><em>هنوز پاسخی از مدیر دریافت نشده است.</em></p>
+                        {% endif %}
+                    </div>
+                    <div class="ticket-footer">
+                        <a href="{{ url_for('delete_ticket', ticket_id=ticket.id) }}" class="btn btn-danger btn-sm delete-btn" onclick="return confirm('آیا مطمئن هستید که می‌خواهید این تیکت را حذف کنید؟');">
+                            حذف
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if tickets|length == 0 %}
+            <p class="text-center mt-4">تیکتی وجود ندارد.</p>
+        {% endif %}
+        <div class="text-center mt-4">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">بازگشت به داشبورد</a>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
