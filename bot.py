@@ -9,15 +9,15 @@ import sqlite3
 from sqlalchemy import create_engine, text
 import time
 
-TOKEN = "7634348306:AAHTG2-HAtKt9hl_q8yFZlgncdM4DcA_iA4"
-ADMIN_CHAT_ID = '2821814'
-CHANNEL_CHAT_ID = '@Dollardata'
+TOKEN = "Token ID"
+ADMIN_CHAT_ID = 'CHAT ID'
+CHANNEL_CHAT_ID = '@Channel id'
 
 # مسیر دیتابیس
-DATABASE_PATH = r"C:\inetpub\wwwroot\flask v0.3\datasitenews5.db"
+DATABASE_PATH = r""
 
 # مسیر فایل اکسل
-EXCEL_FILE_PATH = r"C:\inetpub\wwwroot\flask v0.3\static\scrap.xlsx"
+EXCEL_FILE_PATH = r""
 
 # مسیر فایل ذخیره‌سازی کاربران مجاز
 AUTHORIZED_USERS_FILE = "authorized_users.json"
